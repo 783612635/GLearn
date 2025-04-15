@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\GLearn.cpp">
+    <ClCompile Include="src\GLearn001-triangler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
