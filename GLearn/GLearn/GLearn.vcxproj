@@ -88,6 +88,7 @@
   <ItemGroup>
     <ClCompile Include="src\GLearn001-triangler.cpp" />
     <ClCompile Include="src\GLearn002-indexBuffer.cpp" />
+    <ClCompile Include="src\GLearn003-uniform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />

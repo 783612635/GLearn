@@ -140,100 +140,100 @@ static unsigned int CreateShader(const std::string& vertexShader, const std::str
     return program;
 }
 
-int main(int argc,char** argv)
-{
-    GLFWwindow* window;
-
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
-
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-
-    //glew和glad都需要在初始化一个有效的上下文之后再进行创建
-    if (glewInit() != GLEW_OK)
-    {
-        std::cout << "Error on glewInit();" << std::endl;
-    }
-
-    std::cout << glGetString(GL_VERSION) << std::endl;
-
-    float position[8] = {
-        -0.5f, -0.5f,       //0
-         0.5f, -0.5f,       //1
-         0.5f,  0.5f,       //2
-        -0.5f,  0.5f,       //3
-    };
-
-    unsigned int indices[] = {
-        0,1,2,
-        2,3,0
-    };
-
-    //创建Buffer索引
-    unsigned int buffer;
-    GLCall(glGenBuffers(1, &buffer));
-    //指定使用索引 1 Buffer
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
-    //为该buffer分配空间,并声明为Static类型
-    GLCall(glBufferData(GL_ARRAY_BUFFER,8 * sizeof(unsigned int), position,GL_STATIC_DRAW));
-
-    GLCall(glEnableVertexAttribArray(0));
-    
-    //指明初始索引、数据量、数据类型、是否需要标准化（改为-1.0~1.0之间）、顶点属性总偏移量
-    //最后一个参数是：当前顶点属性在缓冲区中相对于起始位置的偏移量（在一个顶点中，比如前8字节为位置，后面12字节为颜色，则需设为(void*)8）
-    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
-
-    //创建索引缓存
-    unsigned int ibo;
-    GLCall(glGenBuffers(1, &ibo));
-    //指定使用索引 1 Buffer
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-    //为该buffer分配空间,并声明为Static类型
-    GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(float), indices, GL_STATIC_DRAW));
-
-    //相对于生成程序的路径，不是源代码的
-    ShaderProgramSource source = ParserShader("../../GLearn/GLearn/res/shaders/Basic.shader");
-
-    //std::cout << "VERTEX:\n" << source.vertexSource << "\nFRAGMENT:\n" << source.fragmentSource << std::endl;
-
-    unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
-
-    glUseProgram(shader);
-
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        //GLClearError();
-        ////drawcall 之一，无需索引缓存
-        ////glDrawArrays(GL_TRIANGLES, 0, 3);
-        //glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr);//最后一个参数填nullptr的原因是，上面glBindBuffer已经将ibo绑定了
-        ////GLCheckError();
-        //ASSERT(GLLogCall());
-
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
-    }
-    glDeleteProgram(shader);
-
-END:
-    glfwTerminate();
-    return 0;
-}
+//int main(int argc,char** argv)
+//{
+//    GLFWwindow* window;
+//
+//    /* Initialize the library */
+//    if (!glfwInit())
+//        return -1;
+//
+//    /* Create a windowed mode window and its OpenGL context */
+//    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+//    if (!window)
+//    {
+//        glfwTerminate();
+//        return -1;
+//    }
+//
+//    /* Make the window's context current */
+//    glfwMakeContextCurrent(window);
+//
+//    //glew和glad都需要在初始化一个有效的上下文之后再进行创建
+//    if (glewInit() != GLEW_OK)
+//    {
+//        std::cout << "Error on glewInit();" << std::endl;
+//    }
+//
+//    std::cout << glGetString(GL_VERSION) << std::endl;
+//
+//    float position[8] = {
+//        -0.5f, -0.5f,       //0
+//         0.5f, -0.5f,       //1
+//         0.5f,  0.5f,       //2
+//        -0.5f,  0.5f,       //3
+//    };
+//
+//    unsigned int indices[] = {
+//        0,1,2,
+//        2,3,0
+//    };
+//
+//    //创建Buffer索引
+//    unsigned int buffer;
+//    GLCall(glGenBuffers(1, &buffer));
+//    //指定使用索引 1 Buffer
+//    GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
+//    //为该buffer分配空间,并声明为Static类型
+//    GLCall(glBufferData(GL_ARRAY_BUFFER,8 * sizeof(unsigned int), position,GL_STATIC_DRAW));
+//
+//    GLCall(glEnableVertexAttribArray(0));
+//    
+//    //指明初始索引、数据量、数据类型、是否需要标准化（改为-1.0~1.0之间）、顶点属性总偏移量
+//    //最后一个参数是：当前顶点属性在缓冲区中相对于起始位置的偏移量（在一个顶点中，比如前8字节为位置，后面12字节为颜色，则需设为(void*)8）
+//    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
+//
+//    //创建索引缓存
+//    unsigned int ibo;
+//    GLCall(glGenBuffers(1, &ibo));
+//    //指定使用索引 1 Buffer
+//    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+//    //为该buffer分配空间,并声明为Static类型
+//    GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(float), indices, GL_STATIC_DRAW));
+//
+//    //相对于生成程序的路径，不是源代码的
+//    ShaderProgramSource source = ParserShader("../../GLearn/GLearn/res/shaders/Basic.shader");
+//
+//    //std::cout << "VERTEX:\n" << source.vertexSource << "\nFRAGMENT:\n" << source.fragmentSource << std::endl;
+//
+//    unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
+//
+//    glUseProgram(shader);
+//
+//    /* Loop until the user closes the window */
+//    while (!glfwWindowShouldClose(window))
+//    {
+//        /* Render here */
+//        glClear(GL_COLOR_BUFFER_BIT);
+//
+//        //GLClearError();
+//        ////drawcall 之一，无需索引缓存
+//        ////glDrawArrays(GL_TRIANGLES, 0, 3);
+//        //glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr);//最后一个参数填nullptr的原因是，上面glBindBuffer已经将ibo绑定了
+//        ////GLCheckError();
+//        //ASSERT(GLLogCall());
+//
+//        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+//
+//        /* Swap front and back buffers */
+//        glfwSwapBuffers(window);
+//
+//        /* Poll for and process events */
+//        glfwPollEvents();
+//    }
+//    glDeleteProgram(shader);
+//
+//END:
+//    glfwTerminate();
+//    return 0;
+//}
