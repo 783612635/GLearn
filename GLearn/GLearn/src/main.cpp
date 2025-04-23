@@ -2,114 +2,7 @@
 
 #include <include\GLFW\glfw3.h>
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-
-struct ShaderProgramSource
-{
-    std::string vertexSource;
-    std::string fragmentSource;
-};
-
-static ShaderProgramSource ParserShader(const std::string& filePath)
-{
-    std::ifstream stream(filePath);
-    if (!stream.is_open())
-    {
-        std::cout << "Error on open Shader files , the path is " << filePath << std::endl;
-        return { "","" };
-    }
-
-    enum class ShaderType
-    {
-        ST_None = -1,
-        ST_Vertex = 0,
-        ST_Frament = 1,
-    };
-
-    std::string line;
-    std::stringstream ss[2];
-
-    ShaderType type = ShaderType::ST_None;
-
-    while (getline(stream, line))
-    {
-        if (line.find("#shader") != std::string::npos)
-        {
-            if (line.find("vertex") != std::string::npos)
-            {
-                type = ShaderType::ST_Vertex;
-            }
-            else if (line.find("fragment") != std::string::npos)
-            {
-                type = ShaderType::ST_Frament;
-            }
-        }
-        else
-        {
-            ss[(int)type] << line << "\n";
-        }
-    }
-
-    return { ss[0].str(),ss[1].str() };
-    //这个函数虽然可以依靠元组来返回多个返回值，但是这并不推荐，所以我们用自定义结构体来解决
-}
-
-static unsigned int CompileShader(unsigned int type, const std::string& source)
-{
-    unsigned int id = glCreateShader(type);
-    const char* src = source.c_str();
-    //着色器对象的句柄、源码数、源码
-    //填空，意味着字符串以空结尾;
-    //如果非空，应该指向一个数组，包含每个相应元素的字符串长度或者以小于0的值表示以空结尾
-    //
-    glShaderSource(id, 1, &src, nullptr);
-    glCompileShader(id);
-
-    //errors handling
-    int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-    if (result == GL_FALSE)
-    {
-        int length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        char* message = (char*)alloca(sizeof(char) * length);
-        glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "Compile " << ((type == GL_VERTEX_SHADER) ? "vertex" : "fragment") << " Shader Error on:\n"
-            << message << std::endl;
-        glDeleteShader(id);
-        return 0;
-    }
-
-    return id;
-}
-
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
-{
-    //GLuint = unsigned int
-    unsigned int program = glCreateProgram();
-
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-
-    glLinkProgram(program);
-    //检查shader代码是否适用于当前opengl的状态
-    glValidateProgram(program);
-
-    //不管shader是否已经成功链接到程序中，此刻都应该删除其编译中间件等等编译产物
-    //glDetachShader();用以删除源码，但是不太常用，因为源码占用空间比较小，且通常可以帮助我们进行调试
-    glDeleteShader(vs);
-    glDeleteShader(vs);
-
-    return program;
-}
+#include "VertexBufferLayout.h"
 
 int main(int argc, char** argv)
 {
@@ -162,48 +55,33 @@ int main(int argc, char** argv)
     VertexBufferLayout layout;
     layout.Push<float>(2);
     va.AddBuffer(vb, layout);
-
     IndexBuffer ib(indices, 6);
 
-    //相对于生成程序的路径，不是源代码的
-    ShaderProgramSource source = ParserShader("../../GLearn/GLearn/res/shaders/Basic.shader");
-
-    //std::cout << "VERTEX:\n" << source.vertexSource << "\nFRAGMENT:\n" << source.fragmentSource << std::endl;
-
-    unsigned int shader = CreateShader(source.vertexSource, source.fragmentSource);
-
-    GLCall(glUseProgram(shader));
-
-    //在使用一个内建的统一变量前，我们首先要做的是获取这个变量的位置
-    //每个统一变量都有一个id，这样我们就可以引用它了
-    //gl4.3开始，可以指定明确的统一变量位置
-    int location = glGetUniformLocation(shader, "u_Color");
-    ASSERT(location != -1);
-    GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
+    //相对于生成程序的路径，不是源代码的,"../../GLearn/GLearn/res/shaders/Basic.shader"
+    Shader shader("../../GLearn/GLearn/res/shaders/Basic.shader");
+    shader.Bind();
+    shader.SetUniform4f("u_Color",0.4f, 0.3f, 0.8f, 1.0f);
 
     //unBind
-    GLCall(glUseProgram(0));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GLCall(glBindVertexArray(0));
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    va.UnBind();
+    shader.UnBind();
+    vb.UnBind();
+    ib.UnBind();
 
     float r = 0.0f;
     float increment = 0.05f;
+
+    Renderer renderer;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        renderer.Clear();
 
-        //解绑后，在绘制前，重新绑定
-        GLCall(glUseProgram(shader));
-
-        va.Bind();
-        ib.Bind();
-
-        GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        shader.Bind();
+        shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+        renderer.Draw(va,ib,shader);
 
         if (r > 1.0f)
             increment = -0.05f;
@@ -218,7 +96,6 @@ int main(int argc, char** argv)
         /* Poll for and process events */
         glfwPollEvents();
     }
-    GLCall(glDeleteProgram(shader));
 
 END:
     glfwTerminate();
