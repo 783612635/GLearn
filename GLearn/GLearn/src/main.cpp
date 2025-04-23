@@ -1,8 +1,8 @@
 #include "Renderer.h"
-
 #include <include\GLFW\glfw3.h>
 #include <iostream>
 #include "VertexBufferLayout.h"
+#include "Textures.h"
 
 int main(int argc, char** argv)
 {
@@ -38,11 +38,12 @@ int main(int argc, char** argv)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    float position[8] = {
-        -0.5f, -0.5f,       //0
-         0.5f, -0.5f,       //1
-         0.5f,  0.5f,       //2
-        -0.5f,  0.5f,       //3
+    //顶点坐标和纹理坐标
+    float position[16] = {
+        -0.5f, -0.5f,0.0f,0.0f,       //0
+         0.5f, -0.5f,1.0f,0.0f,     //1
+         0.5f,  0.5f, 1.0f,1.0f,    //2
+        -0.5f,  0.5f, 0.0f,1.0f    //3
     };
 
     unsigned int indices[] = {
@@ -50,9 +51,14 @@ int main(int argc, char** argv)
         2,3,0
     };
 
+    //启用透明混合
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));//设置混合函数
+    GLCall(glEnable(GL_BLEND));
+
     VertexArray va;
-    VertexBuffer vb(position, 4 * 2 * sizeof(float));
+    VertexBuffer vb(position, 4 * 4 * sizeof(float));
     VertexBufferLayout layout;
+    layout.Push<float>(2);
     layout.Push<float>(2);
     va.AddBuffer(vb, layout);
     IndexBuffer ib(indices, 6);
@@ -61,6 +67,10 @@ int main(int argc, char** argv)
     Shader shader("../../GLearn/GLearn/res/shaders/Basic.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color",0.4f, 0.3f, 0.8f, 1.0f);
+
+    Texture texture("../../GLearn/GLearn/res/textures/fiona.jpg");
+    texture.Bind();
+    shader.SetUniform1i("u_Texture",0);//指定OpenGL应该从哪个插槽取纹理数据
 
     //unBind
     va.UnBind();
