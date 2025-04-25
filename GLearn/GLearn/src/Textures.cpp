@@ -1,5 +1,5 @@
 #include "Textures.h"
-#include "Vendor/stb_image/stb_image.h"
+#include "stb_image/stb_image.h"
 
 Texture::Texture(const std::string& filePath)
 	:m_FilePath(filePath)
