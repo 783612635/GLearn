@@ -115,6 +115,7 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
     return program;
 }
 
+//将取出的统一变量的位置缓存起来，避免多次调用glGetUniformLocation降低效率
 unsigned int Shader::GetUniformLocation(const std::string& name)
 {
     if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
@@ -141,6 +142,11 @@ void Shader::UnBind() const
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
     GLCall(glUniform4f(GetUniformLocation(name), v0,v1,v2,v3));
+}
+
+void Shader::SetUniformVec4f(const std::string& name, const glm::vec4& vec)
+{
+    GLCall(glUniform4fv(GetUniformLocation(name), 1,  &vec[0]));
 }
 
 void Shader::SetUniform1i(const std::string& name, int value)

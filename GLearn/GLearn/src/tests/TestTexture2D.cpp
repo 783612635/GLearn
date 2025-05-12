@@ -18,12 +18,12 @@ namespace test
 			-100.0f, -100.0f, 0.0f, 0.0f,     //0
 			 100.0f, -100.0f, 1.0f, 0.0f,     //1
 			 100.0f,  100.0f, 1.0f, 1.0f,     //2
-			-100.0f,  100.0f, 0.0f, 1.0f      //3
+			-100.0f,  100.0f, 0.0f, 1.0f,     //3
 		};
 
 		unsigned int indices[] = {
 			0,1,2,
-			2,3,0
+			2,3,0,
 		};
 
 		//启用透明混合
@@ -34,7 +34,9 @@ namespace test
 		m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 6);
 		m_VertexBuffer = std::make_unique<VertexBuffer>(position, 4 * 4 * sizeof(float));
 		VertexBufferLayout layout;
+		//位置属性
 		layout.Push<float>(2);
+		//纹理属性
 		layout.Push<float>(2);
 		m_VAO->AddBuffer(*m_VertexBuffer, layout);
 
