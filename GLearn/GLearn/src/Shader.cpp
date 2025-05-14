@@ -159,3 +159,8 @@ void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& mat)
     //v 意思是传入一个数组
     GLCall(glUniformMatrix4fv(GetUniformLocation(name),1, GL_FALSE,&mat[0][0]));
 }
+
+void Shader::SetUniform1iv(const std::string& name, size_t size, int* arrays)
+{
+    GLCall(glUniform1iv(GetUniformLocation(name), size, arrays));
+}
