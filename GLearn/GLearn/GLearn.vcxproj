@@ -97,6 +97,7 @@
     <ClCompile Include="src\tests\TestBatchRendering.cpp" />
     <ClCompile Include="src\tests\TestBatchTextures.cpp" />
     <ClCompile Include="src\tests\TestClearColor.cpp" />
+    <ClCompile Include="src\tests\TestDynamicalRendering.cpp" />
     <ClCompile Include="src\tests\TestTexture2D.cpp" />
     <ClCompile Include="src\Textures.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
@@ -113,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\BatchDynamics.shader" />
     <None Include="res\shaders\BatchTest.shader" />
     <None Include="res\shaders\BatchTexture.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
@@ -262,6 +264,7 @@
     <ClInclude Include="src\tests\TestBatchRendering.h" />
     <ClInclude Include="src\tests\TestBatchTextures.h" />
     <ClInclude Include="src\tests\TestClearColor.h" />
+    <ClInclude Include="src\tests\TestDynamicalRendering.h" />
     <ClInclude Include="src\tests\TestTexture2D.h" />
     <ClInclude Include="src\Textures.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />

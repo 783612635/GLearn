@@ -87,6 +87,9 @@
     <ClCompile Include="src\tests\TestBatchTextures.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\TestDynamicalRendering.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -506,6 +509,7 @@
     </None>
     <None Include="res\shaders\BatchTest.shader" />
     <None Include="res\shaders\BatchTexture.shader" />
+    <None Include="res\shaders\BatchDynamics.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1448,6 +1452,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\tests\TestBatchTextures.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestDynamicalRendering.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

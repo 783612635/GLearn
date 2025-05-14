@@ -14,6 +14,7 @@
 #include "Tests\TestTexture2D.h"
 #include "Tests\TestBatchRendering.h"
 #include "Tests\TestBatchTextures.h"
+#include "Tests\TestDynamicalRendering.h"
 
 int main(int argc, char** argv)
 {
@@ -76,6 +77,7 @@ int main(int argc, char** argv)
         testMenu->RegisterTest<test::TestTexture2D>("Test Texture2D");
         testMenu->RegisterTest<test::TestBatchRendering>("Test BatchRendering");
         testMenu->RegisterTest<test::TestBatchTextures>("Test BatchTextures");
+        testMenu->RegisterTest<test::TestDynamicalRendering>("Test DynamicalRendering");
 
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))

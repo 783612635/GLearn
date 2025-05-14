@@ -68,7 +68,7 @@ void test::TestBatchRendering::OnRender()
 		glm::mat4 model = glm::translate(glm::mat4(1.0f), m_Translation);
 		glm::mat4 mvp = m_Proj * m_View * model;
 		m_Shader->SetUniformMat4f("u_MVP", mvp);
-		m_Shader->SetUniformVec4f("u_Color", m_RGB);
+		//m_Shader->SetUniformVec4f("u_Color", m_RGB);
 		renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
 	}
 }
@@ -76,6 +76,6 @@ void test::TestBatchRendering::OnRender()
 void test::TestBatchRendering::OnImGuiRender()
 {
 	ImGui::SliderFloat3("translation", &m_Translation.x, 0.0f, 1980.0f);
-	ImGui::SliderFloat3("color", &m_RGB.x, 0.0f, 1.0f);
+	//ImGui::SliderFloat3("color", &m_RGB.x, 0.0f, 1.0f);
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 }
