@@ -7,6 +7,7 @@
 
 #include <array>
 
+//下面这段是为了贴合视频，实际上我们可以使用glm::vec*
 struct vec2
 {
 	float x, y;
