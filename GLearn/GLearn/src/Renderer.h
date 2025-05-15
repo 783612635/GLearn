@@ -23,6 +23,7 @@ public:
 
     void Clear() const;
     void Draw(const VertexArray& va, const IndexBuffer& vb, const Shader& shader) const;
+    void Draw(const VertexArray& va, const IndexBuffer& vb, const size_t ibCount, const Shader& shader) const;
 
 private:
 

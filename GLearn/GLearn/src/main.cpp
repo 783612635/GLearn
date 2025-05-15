@@ -15,6 +15,7 @@
 #include "Tests\TestBatchRendering.h"
 #include "Tests\TestBatchTextures.h"
 #include "Tests\TestDynamicalRendering.h"
+#include "Tests\TestBatchIndexBuffer.h"
 
 int main(int argc, char** argv)
 {
@@ -78,6 +79,7 @@ int main(int argc, char** argv)
         testMenu->RegisterTest<test::TestBatchRendering>("Test BatchRendering");
         testMenu->RegisterTest<test::TestBatchTextures>("Test BatchTextures");
         testMenu->RegisterTest<test::TestDynamicalRendering>("Test DynamicalRendering");
+        testMenu->RegisterTest<test::TestBatchIndexBuffer>("Test BatchIndexBuffer");
 
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
